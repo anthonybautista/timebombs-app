@@ -65,7 +65,7 @@ const app = Vue.createApp({
                 'When there are less-than or equal-to the Max Winners remaining, you can halt the game and claim your prize!',
             ],
             selected: "Your Bombs",
-            myBombs : [new Bomb(999999,"/images/no-bomb.png")],
+            myBombs : [new Bomb(999999,"/timebombs-app/images/no-bomb.png")],
             refreshController: false,
             connected: false,
             alias: "",
@@ -233,7 +233,7 @@ const app = Vue.createApp({
                         bombs.push(new Bomb(token, uri));
                     });
                 } else {
-                    bombs.push(new Bomb(99999,"/images/no-bomb.png",0,false));
+                    bombs.push(new Bomb(99999,"/timebombs-app/images/no-bomb.png",0,false));
                 }
             }).catch(function (error) {
                 console.error(error);
