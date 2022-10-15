@@ -70,7 +70,7 @@ app.component('Dashboard', {
                         </div>
                     </div>
                     <div class="smolBombContainer bg-accent flex justify-center q-ma-l q-pa-md text-center rounded-borders">
-                        <q-img src="../../images/bomb.png" class="smolBomb" v-for="bomb in bombs" @click="getTime(bomb)">
+                        <q-img src="../images/bomb.png" class="smolBomb" v-for="bomb in bombs" @click="getTime(bomb)">
                             <p class="text-white flex flex-center bombText">
                                 {{Number(bomb)}}
                             </p>
