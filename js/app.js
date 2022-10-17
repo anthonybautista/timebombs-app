@@ -8,7 +8,7 @@ let provider = null,
 signer = null,
 currentNetwork = null,
 nftAddress = "",
-gameAddress = "0x9B2434123DF2068AF536C84BfE3D533126Ea9217",
+gameAddress = "0x38C1Acc7bb26CD108E4DA34eC8CD48D05e02271f",
 cost = 0,
 fee = 0,
 maxSupply = 0,
@@ -29,16 +29,16 @@ async function getGameData(address) {
 }
 
 /* web3 code borrowed and modified from ftso.alexdupre.com */
+// const networks = {
+//     '0xa86a': {
+//         chainId: '0xa86a',
+//         chainName: 'Avalanche',
+//         nativeCurrency: { decimals: 18, symbol: 'AVAX' },
+//         rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+//         blockExplorerUrls: ['https://snowtrace.io'],
+//     },
+// }
 const networks = {
-    '0xa86a': {
-        chainId: '0xa86a',
-        chainName: 'Avalanche',
-        nativeCurrency: { decimals: 18, symbol: 'AVAX' },
-        rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-        blockExplorerUrls: ['https://snowtrace.io'],
-    },
-}
-/*const networks = {
     '0xa869': {
         chainId: '0xa869',
         chainName: 'Fuji',
@@ -46,9 +46,12 @@ const networks = {
         rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
         blockExplorerUrls: ['https://testnet.snowtrace.io'],
     },
-}*/
-const RPC = 'https://api.avax.network/ext/bc/C/rpc';
-const explorer = 'https://snowtrace.io/tx/';
+}
+//const RPC = 'https://api.avax.network/ext/bc/C/rpc';
+//const explorer = 'https://snowtrace.io/tx/';
+
+const RPC = 'https://api.avax-test.network/ext/bc/C/rpc';
+const explorer = 'https://testnet.snowtrace.io/tx/';
 
 const app = Vue.createApp({
     data(){
@@ -192,8 +195,8 @@ const app = Vue.createApp({
             const t = new ethers.providers.JsonRpcProvider(RPC);
             let fireContract = new ethers.Contract(FIRE_ADDRESS, FIRE, t);
             let account = await signer.getAddress();
-            let fire = await fireContract.usernameFor(account);
-            //let fire = "";
+            //let fire = await fireContract.usernameFor(account);
+            let fire = "";
             if (fire !== "") {
                 this.alias = fire;
             } else {
@@ -201,16 +204,6 @@ const app = Vue.createApp({
             }
         },
         getBombs: function() {
-            /*const options = {
-                method: 'GET',
-                url: 'https://deep-index.moralis.io/api/v2/'+this.account+'/nft',
-                params: {
-                    chain: '0xa86a',
-                    format: 'decimal',
-                    token_addresses: this.nftAddress,
-                },
-                headers: {accept: 'application/json', 'X-API-Key': 'naggQZQHKX2aoWZNsi4ttLcGR0959aM4N93dYjrvmMDRujDY3c7ZBGhUP0Vjg1OU'}
-            };*/
             const options = {
                 method: 'GET',
                 url: 'https://deep-index.moralis.io/api/v2/'+this.account+'/nft',
@@ -221,6 +214,16 @@ const app = Vue.createApp({
                 },
                 headers: {accept: 'application/json', 'X-API-Key': 'naggQZQHKX2aoWZNsi4ttLcGR0959aM4N93dYjrvmMDRujDY3c7ZBGhUP0Vjg1OU'}
             };
+            /*const options = {
+                method: 'GET',
+                url: 'https://deep-index.moralis.io/api/v2/'+this.account+'/nft',
+                params: {
+                    chain: '0xa86a',
+                    format: 'decimal',
+                    token_addresses: nftAddress,
+                },
+                headers: {accept: 'application/json', 'X-API-Key': 'naggQZQHKX2aoWZNsi4ttLcGR0959aM4N93dYjrvmMDRujDY3c7ZBGhUP0Vjg1OU'}
+            };*/
             let bombs = [];
             axios.request(options).then(function (response) {
                 if(response.data.total > 0) {

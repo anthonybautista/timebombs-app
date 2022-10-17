@@ -58,14 +58,14 @@ app.component('Dashboard', {
                 <q-banner rounded class="bg-accent text-white">
                     <p>Active Bombs</p>
                     <div id="gameBanner" class="text-center">
-                        <div id="gameStartDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
+                        <div id="bombTimerDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
                             <p class="q-mb-xs">Bomb Timer</p>
                             <p v-if="bombTimer > 0" class="q-mb-none">{{ days }}:{{ hours }}:{{ minutes }}:{{ seconds }}</p>
                             <p v-else-if="bombTimer===null" class="q-mb-none">SELECT BOMB</p>
                             <p v-else class="q-mb-none">DETONATED</p>
                         </div>
-                        <div id="bombsLeftDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
-                            <p class="q-mb-xs">Bombs #</p>
+                        <div id="bombSelectorDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
+                            <p class="q-mb-xs">Bomb #</p>
                             <p class="q-mb-none">{{selectedBomb}}</p>
                         </div>
                     </div>

@@ -41,12 +41,12 @@
 #gameStartDiv {
     width: 150px;
     grid-column: 1/2;
+    margin: auto;
 }
 
 #rules {
     width: 85%;
     min-width: 348px;
-    margin: auto;
 }
 
 .smolBombContainer {
