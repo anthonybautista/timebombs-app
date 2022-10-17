@@ -208,7 +208,7 @@ const app = Vue.createApp({
                 method: 'GET',
                 url: 'https://deep-index.moralis.io/api/v2/'+this.account+'/nft',
                 params: {
-                    chain: '0xa86a',
+                    chain: '0xa869',
                     format: 'decimal',
                     token_addresses: nftAddress,
                 },
