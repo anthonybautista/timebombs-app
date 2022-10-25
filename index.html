@@ -22,10 +22,10 @@
                     <q-toolbar-title>
                             <img src="images/logo-large.png" class="logo"/>
                     </q-toolbar-title>
-                    <q-btn v-if="!connected" @click="connect" class="bg-accent">
+                    <q-btn v-if="wallet && !wallet.connected" @click="connect" class="bg-accent">
                         Connect Wallet
                     </q-btn>
-                    <q-btn v-if="connected" class="bg-negative text-lowercase text-caption q-px-xs">{{alias}}</q-btn>
+                    <q-btn v-if="wallet && wallet.connected" class="bg-negative text-lowercase text-caption q-px-xs">{{wallet.alias}}</q-btn>
                 </q-toolbar>
                 <div>
                     <q-btn-toggle
@@ -41,20 +41,22 @@
             </q-header>
             <div class="buffer q-mt-xl"></div>
 
-            <game-card :bombs="myBombs" :show-dash="showDash" @update-game="setUpGame"></game-card>
+            <game-card v-if="game" :bombs="myBombs" :game="game" :wallet="wallet" @update-game="setUpGame">
+                <bomb-container v-if="selected === 'Your Bombs'" :bombs="myBombs" :game="game" :wallet="wallet" :key="refreshController" @reload="reloadContainer"></bomb-container>
+                <dashboard v-else-if="selected === 'Dashboard'" :game="game"></dashboard>
+                <q-banner v-else-if="selected === 'Rules'" rounded class="bg-accent text-white text-center" id="rules">
+                    <p class="q-mb-none">RULES</p>
+                    <div class="smolBombContainer bg-accent flex justify-center q-ma-l q-pa-md text-center rounded-borders">
+                        <ul class="q-ma-none">
+                            <li class="ruleItem" v-for="rule in rules">
+                                {{rule}}
+                            </li>
+                        </ul>
+                    </div>
+                </q-banner>
+            </game-card>
 
-            <bomb-container v-if="selected === 'Your Bombs'" :bombs="myBombs" :key="refreshController" @reload="reloadContainer"></bomb-container>
-
-            <q-banner v-else-if="selected === 'Rules'" rounded class="bg-accent text-white text-center" id="rules">
-                <p class="q-mb-none">RULES</p>
-                <div class="smolBombContainer bg-accent flex justify-center q-ma-l q-pa-md text-center rounded-borders">
-                    <ul class="q-ma-none">
-                        <li class="ruleItem" v-for="rule in rules">
-                            {{rule}}
-                        </li>
-                    </ul>
-                </div>
-            </q-banner>
+            <div class="buffer-lg"></div>
 
             <q-footer class="bg-primary text-white q-pt-sm">
                 <q-toolbar>

@@ -1,15 +1,16 @@
 app.component('Dashboard', {
     data: function() {
         return {
-            gameStarted: Date.now() > startTime,
+            gameStarted: Date.now() > this.game.startTime,
             selectedBomb: null,
             bombTimer: null,
+            activeBombs: [],
         }
     },
 
     props: {
-        bombs: {
-            type: Array,
+        game: {
+            type: Object,
             required: true,
         },
     },
@@ -17,8 +18,7 @@ app.component('Dashboard', {
     methods: {
         async getTime(id) {
             this.selectedBomb = Number(id);
-            let info = await bombInfo(Number(id));
-            console.log(bombInfo)
+            let info = await Bomb.bombInfo(this.game, Number(id));
             this.bombTimer = (Number(info[1]) * 1000) - Date.now();
         },
     },
@@ -39,25 +39,32 @@ app.component('Dashboard', {
         seconds(){
             let seconds = (this.bombTimer % MS_PER_MINUTE) / MS_PER_SECOND;
             return this.bombTimer > 0 ? Math.floor(seconds) : Math.abs(Math.ceil(seconds));
-        }
+        },
+        updateActive: async function() {
+            const t = new ethers.providers.JsonRpcProvider(this.game.RPC);
+            let gameContract = new ethers.Contract(this.game.gameAddress, this.game.ABI, t);
+            this.activeBombs = await gameContract.getActiveBombs();
+        },
     },
 
     watch: {
-        bombs: {
-            handler: async function() {
-                console.log(this.bombs)
+        activeBombs: {
+            handler: async function(newArray) {
+                this.remaining = newArray.length;
             },
         },
     },
 
-    mounted: function () {
-        console.log(this.bombs)
+    mounted: async function () {
+
+        setTimeout(await this.updateActive(),2000);
+
     },
 
-    template: `<div class="flex justify-center q-ma-l q-pa-md text-center bg-primary" id="itemContainer">
+    template: `<div class="flex justify-center q-ma-l q-pa-md text-center bg-primary" id="itemContainer2">
                 <q-banner rounded class="bg-accent text-white">
                     <p>Active Bombs</p>
-                    <div id="gameBanner" class="text-center">
+                    <div id="gameBanner2" class="text-center">
                         <div id="bombTimerDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
                             <p class="q-mb-xs">Bomb Timer</p>
                             <p v-if="bombTimer > 0" class="q-mb-none">{{ days }}:{{ hours }}:{{ minutes }}:{{ seconds }}</p>
@@ -70,7 +77,7 @@ app.component('Dashboard', {
                         </div>
                     </div>
                     <div class="smolBombContainer bg-accent flex justify-center q-ma-l q-pa-md text-center rounded-borders">
-                        <q-img src="/timebombs-app/images/bomb.png" class="smolBomb" v-for="bomb in bombs" @click="getTime(bomb)">
+                        <q-img src="/timebombs-app/images/bomb.png" class="smolBomb" v-for="bomb in activeBombs" @click="getTime(bomb)">
                             <p class="text-white flex flex-center bombText">
                                 {{Number(bomb)}}
                             </p>

@@ -1,30 +1,8 @@
-async function haltGame(bomb) {
-    //provider = new ethers.providers.Web3Provider(window.ethereum);
-    //let signer = this.provider.getSigner();
-    let gameContract = new ethers.Contract(gameAddress, GAME, signer);
-    try {
-        if (ethereum) {
-            let n = await gameContract.haltGame(bomb);
-            await n.wait();
-            console.log(`https://snowtrace.io/tx/${n.hash}`);
-        } else console.log("Ethereum object doesn't exist!");
-    } catch (t) {
-        console.log(t);
-        return t.data.message;
-    }
-}
-
-async function getRemaining() {
-    const t = new ethers.providers.JsonRpcProvider(RPC);
-    let gameContract = new ethers.Contract(gameAddress, GAME, t);
-    return await gameContract.getActiveBombs();
-}
-
 app.component('GameCard', {
     data: function() {
         return {
             errorMessage: "",
-            gameStarted: Date.now() > startTime,
+            gameStarted: false,
             remaining: 0,
             timeRemaining: 0,
             timed: false,
@@ -40,6 +18,14 @@ app.component('GameCard', {
         },
         showDash: {
             type: Boolean,
+            required: true,
+        },
+        game: {
+            type: Object,
+            required: true,
+        },
+        wallet: {
+            type: Object,
             required: true,
         },
     },
@@ -80,7 +66,7 @@ app.component('GameCard', {
                     i++;
                 }
                 if (winningBomb > 0) {
-                    await haltGame(winningBomb);
+                    this.errorMessage = await Bomb.haltGame(this.game, this.wallet, winningBomb);
                 } else {
                     this.errorMessage = "You don't have a winning bomb!";
                 }
@@ -89,41 +75,33 @@ app.component('GameCard', {
                 this.errorMessage = e;
             }
         },
-        async updateActive() {
-            this.activeBombs = await getRemaining();
-        },
         emitUpdate() {
             this.$emit('update-game');
-        }
+        },
     },
 
     watch: {
-        activeBombs: {
-            handler: async function(newArray) {
-                this.remaining = newArray.length;
-            },
-        },
     },
 
     mounted: async function () {
-        await this.updateActive();
-        this.allowHalt = this.remaining <= maxWinners;
 
-        if (Date.now() > startTime) {
+        if (Date.now() > this.game.startTime) {
             setInterval(() => {
                 // update time remaining
-                this.timeRemaining = startTime - Date.now();
+                this.timeRemaining = this.game.startTime - Date.now();
             }, 1000);
         }
-        this.gameStarted = Date.now() > startTime;
-        if (!gameOver) {
+
+        if (!this.game.gameOver) {
             setInterval(this.updateActive, 60000);
-            this.allowHalt = this.remaining <= maxWinners;
+            this.allowHalt = this.remaining <= this.game.maxWinners;
         }
+        this.gameStarted = Date.now() > this.game.startTime;
+        this.allowHalt = this.remaining <= this.game.maxWinners;
     },
 
     template: `<div class="q-pa-md q-gutter-sm q-mt-xl q-mb-none flex justify-center">
-                <q-banner rounded class="bg-accent text-white" :key="remaining">
+                <q-banner rounded class="bg-accent text-white" :key="startTime">
 
                     <div id="gameBanner" class="text-center">
                         <div id="gameStartDiv" class="bg-primary q-pa-sm q-mx-xs rounded-borders shadow-5">
@@ -140,9 +118,9 @@ app.component('GameCard', {
                         <p class="text-negative">{{this.errorMessage}}</p>
                     </div>
                     <div class="flex justify-center">
-                        <q-btn v-if="allowHalt" color="negative" label="Halt Game" class="gameButton q-mt-sm shadow-5" @click="halt"></q-btn>
+                        <q-btn v-if="allowHalt && gameStarted" color="negative" label="Halt Game" class="gameButton q-mt-sm shadow-5" @click="halt" :key="gameStarted"></q-btn>
                     </div>
                 </q-banner>
             </div>
-            <dashboard v-if="showDash" :key="showDash" :bombs="activeBombs"></dashboard>`,
+            <slot></slot>`,
 });

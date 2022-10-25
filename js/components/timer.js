@@ -6,8 +6,8 @@ const MS_PER_SECOND = 1000;
 app.component('Timer', {
     data(){
         return {
-            timeRemaining: (this.bombTimestamp + resetInterval) - Date.now(),
-            gameStarted: Date.now() > startTime,
+            timeRemaining: (this.bombTimestamp + this.game.resetInterval) - Date.now(),
+            gameStarted: Date.now() > this.game.startTime,
         }
     },
 
@@ -18,6 +18,10 @@ app.component('Timer', {
         },
         active: {
             type: Boolean,
+            required: true,
+        },
+        game: {
+            type: Object,
             required: true,
         },
     },
@@ -46,7 +50,7 @@ app.component('Timer', {
         if (this.gameStarted && this.timeRemaining > 0 && this.active) {
             setInterval(() => {
                 // update time remaining
-                this.timeRemaining = (this.bombTimestamp + resetInterval) - Date.now();
+                this.timeRemaining = (this.bombTimestamp + this.game.resetInterval) - Date.now();
             }, 1000);
         }
     },

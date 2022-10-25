@@ -23,6 +23,10 @@
     height: 5px;
 }
 
+.buffer-lg {
+    height: 100px;
+}
+
 .bombCard {
     width: 160px;
 }
@@ -38,6 +42,14 @@
     font-weight: bolder;
 }
 
+#gameBanner2 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
+    font-weight: bolder;
+    min-width: 310px;
+}
+
 #gameStartDiv {
     width: 150px;
     grid-column: 1/2;
@@ -47,6 +59,7 @@
 #rules {
     width: 85%;
     min-width: 348px;
+    margin: auto;
 }
 
 .smolBombContainer {
