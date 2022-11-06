@@ -3,24 +3,24 @@ const { ethereum } = window;
 const app = Vue.createApp({
     data(){
         return {
-            //defaultNetwork: '0xa86a'
-            defaultNetwork: '0xa869',
-            //networks: {'0xa86a': {
-            //          chainId: '0xa86a',
-            //              chainName: 'Avalanche',
-            //              nativeCurrency: { decimals: 18, symbol: 'AVAX' },
-            //              rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-            //              blockExplorerUrls: ['https://snowtrace.io'],
-            //              },
-            //},
-            networks: {'0xa869': {
+            defaultNetwork: '0xa86a',
+            //defaultNetwork: '0xa869',
+            networks: {'0xa86a': {
+                      chainId: '0xa86a',
+                          chainName: 'Avalanche',
+                          nativeCurrency: { decimals: 18, symbol: 'AVAX' },
+                          rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+                          blockExplorerUrls: ['https://snowtrace.io'],
+                          },
+            },
+            /*networks: {'0xa869': {
                             chainId: '0xa869',
                             chainName: 'Fuji',
                             nativeCurrency: { decimals: 18, symbol: 'AVAX' },
                             rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
                             blockExplorerUrls: ['https://testnet.snowtrace.io'],
                             },
-            },
+            },*/
             wallet: null,
             categories: [
                 {label: 'Your Bombs', value: 'Your Bombs'},
@@ -37,9 +37,10 @@ const app = Vue.createApp({
             myBombs : [new Bomb(999999,"/timebombs-app/images/no-bomb.png")],
             refreshController: false,
             game: null,
-            gameAddress: "0x38C1Acc7bb26CD108E4DA34eC8CD48D05e02271f",
-            RPC: 'https://api.avax-test.network/ext/bc/C/rpc',
-            //RPC: 'https://api.avax.network/ext/bc/C/rpc',
+            gameId: 0,
+            gameAddress: "",
+            //RPC: 'https://api.avax-test.network/ext/bc/C/rpc',
+            RPC: 'https://api.avax.network/ext/bc/C/rpc',
             ABI: '[{"inputs":[{"internalType":"address","name":"subAddress","type":"address"},{"internalType":"uint64","name":"subscriptionId","type":"uint64"},{"internalType":"address","name":"operator","type":"address"},{"internalType":"address","name":"bombNFT","type":"address"},{"internalType":"bool","name":"useERC20","type":"bool"},{"internalType":"bool","name":"feeERC20","type":"bool"},{"internalType":"uint256","name":"_cost","type":"uint256"},{"internalType":"uint256","name":"_fee","type":"uint256"},{"internalType":"uint256","name":"_maxSupply","type":"uint256"},{"internalType":"uint8","name":"maxPerAddress","type":"uint8"},{"internalType":"uint256","name":"_startTime","type":"uint256"},{"internalType":"uint8","name":"successPercentage","type":"uint8"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"have","type":"address"},{"internalType":"address","name":"want","type":"address"}],"name":"OnlyCoordinatorCanFulfill","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"bomb","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"}],"name":"BombActivated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"BombDetonated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"caller","type":"address"},{"indexed":true,"internalType":"uint256","name":"bomb","type":"uint256"},{"indexed":false,"internalType":"bool","name":"successful","type":"bool"}],"name":"BombReset","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"},{"indexed":true,"internalType":"uint256","name":"bombsRemaining","type":"uint256"},{"indexed":true,"internalType":"address","name":"caller","type":"address"}],"name":"GameHalted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"PrizeClaimed","type":"event"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"activateBomb","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"addressToBombs","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"bombToStruct","outputs":[{"internalType":"uint256","name":"index","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"bool","name":"active","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"checkUpkeep","outputs":[{"internalType":"bool","name":"upkeepNeeded","type":"bool"},{"internalType":"bytes","name":"performData","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"emergencyWithdrawERC20","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"flipPaused","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"gameTokenAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getActiveBombs","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"getBombInfo","outputs":[{"components":[{"internalType":"uint256","name":"index","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"bool","name":"active","type":"bool"}],"internalType":"struct Timebomb.BombStruct","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getGameInfo","outputs":[{"components":[{"internalType":"address","name":"gameOperator","type":"address"},{"internalType":"address","name":"bombNFTAddress","type":"address"},{"internalType":"uint256","name":"cost","type":"uint256"},{"internalType":"uint256","name":"fee","type":"uint256"},{"internalType":"uint256","name":"individualPrize","type":"uint256"},{"internalType":"uint256","name":"maxSupply","type":"uint256"},{"internalType":"uint256","name":"timeInterval","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint16","name":"keeperInterval","type":"uint16"},{"internalType":"uint8","name":"nftPerAddressLimit","type":"uint8"},{"internalType":"uint8","name":"safePercentile","type":"uint8"},{"internalType":"uint8","name":"maxWinners","type":"uint8"},{"internalType":"uint8","name":"bombGroupSize","type":"uint8"},{"internalType":"bool","name":"paused","type":"bool"},{"internalType":"bool","name":"gameOver","type":"bool"},{"internalType":"bool","name":"chargeERC20","type":"bool"},{"internalType":"bool","name":"chargeFeeERC20","type":"bool"}],"internalType":"struct Timebomb.GameStruct","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPot","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"getTimeLeft","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getTotalActive","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"haltGame","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"isActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"manualDetonate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes","name":"","type":"bytes"}],"name":"performUpkeep","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"requestId","type":"uint256"},{"internalType":"uint256[]","name":"randomWords","type":"uint256[]"}],"name":"rawFulfillRandomWords","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"requestCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bomb","type":"uint256"}],"name":"resetBomb","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint8","name":"_newAmount","type":"uint8"}],"name":"setBombGroupSize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint32","name":"_newAmount","type":"uint32"}],"name":"setCallbackGasLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newAmount","type":"uint256"}],"name":"setCost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newAmount","type":"uint256"}],"name":"setFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newAddress","type":"address"}],"name":"setGameOperator","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"name":"setGameToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newAmount","type":"uint256"}],"name":"setInterval","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint16","name":"_newAmount","type":"uint16"}],"name":"setKeeperInterval","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"_newKeyHash","type":"bytes32"}],"name":"setKeyHash","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint8","name":"_newAmount","type":"uint8"}],"name":"setMaxPerAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint8","name":"_newAmount","type":"uint8"}],"name":"setMaxWinners","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newAmount","type":"uint256"}],"name":"setStartTime","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newAddress","type":"address"}],"name":"setSub","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint64","name":"_newAmount","type":"uint64"}],"name":"setSubId","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"subscriptionAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]',
             FIRE_ADDRESS: "0x5adCD28C08Fdc5a913982391cebD866b27C717D4",
             FIRE: '[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"string","name":"username","type":"string"}],"name":"activate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"username","type":"string"}],"name":"addressFor","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"string","name":"username","type":"string"}],"name":"deactivate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"nftNameService","type":"address"},{"internalType":"bool","name":"allowed_","type":"bool"}],"name":"setAllowed","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"usernameFor","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}]',
@@ -136,7 +137,6 @@ const app = Vue.createApp({
             }
         },
         handleChainChanged: async function(chainId) {
-            //window.location.reload()
             console.log("Chain changed to " + chainId)
             this.wallet.currentNetwork = this.networks[chainId]
             // reload provider and signer on chain change
@@ -150,7 +150,6 @@ const app = Vue.createApp({
             }
         },
         handleAccountsChanged: async function(accounts) {
-            //window.location.reload()
             console.log('Account changed to !' + accounts[0])
             await this.createWallet();
             if (accounts.length === 0) {
@@ -160,8 +159,8 @@ const app = Vue.createApp({
         getAlias: async function(account) {
             const t = new ethers.providers.JsonRpcProvider(this.RPC);
             let fireContract = new ethers.Contract(this.FIRE_ADDRESS, this.FIRE, t);
-            //let fire = await fireContract.usernameFor(account);
-            let fire = "";
+            let fire = await fireContract.usernameFor(account);
+            //let fire = "";
             if (fire !== "") {
                 return fire;
             } else {
@@ -169,7 +168,7 @@ const app = Vue.createApp({
             }
         },
         getBombs: function() {
-            const options = {
+            /*const options = {
                 method: 'GET',
                 url: 'https://deep-index.moralis.io/api/v2/'+this.wallet.account+'/nft',
                 params: {
@@ -178,17 +177,17 @@ const app = Vue.createApp({
                     token_addresses: this.game.nftAddress,
                 },
                 headers: {accept: 'application/json', 'X-API-Key': 'naggQZQHKX2aoWZNsi4ttLcGR0959aM4N93dYjrvmMDRujDY3c7ZBGhUP0Vjg1OU'}
-            };
-            /*const options = {
+            };*/
+            const options = {
                 method: 'GET',
-                url: 'https://deep-index.moralis.io/api/v2/'+this.account+'/nft',
+                url: 'https://deep-index.moralis.io/api/v2/'+this.wallet.account+'/nft',
                 params: {
                     chain: '0xa86a',
                     format: 'decimal',
-                    token_addresses: nftAddress,
+                    token_addresses: this.game.nftAddress,
                 },
                 headers: {accept: 'application/json', 'X-API-Key': 'naggQZQHKX2aoWZNsi4ttLcGR0959aM4N93dYjrvmMDRujDY3c7ZBGhUP0Vjg1OU'}
-            };*/
+            };
             let bombs = [];
             axios.request(options).then(function (response) {
                 if(response.data.total > 0) {
@@ -214,29 +213,9 @@ const app = Vue.createApp({
         reloadContainer() {
             setTimeout(this.test,1000);
         },
-        getGameData: async function(address) {
-            const t = new ethers.providers.JsonRpcProvider(this.RPC);
-            let gameContract = new ethers.Contract(address, this.ABI, t);
-            return await gameContract.getGameInfo();
-        },
-        setUpGame: async function() {
-            let data = await this.getGameData(this.gameAddress);
-            this.game = new Game(data[1],
-                                this.gameAddress,
-                                this.RPC,
-                                this.ABI,
-                                Number(data[2]) / 10**18,
-                            Number(data[3]) / 10**18,
-                                Number(data[5]),
-                                Number(data[6]) * 1000,
-                                Number(data[7]) * 1000,
-                                data[9],
-                                data[10],
-                                data[11],
-                                data[13],
-                                data[14],
-                                data[15],
-                                data[16])
+        onSubmit() {
+          // need to get address for gameId
+          this.gameAddress = "0x11ee40b356EE757245DC994fB04Acd5a455A2eAe";
         },
     },
 
@@ -247,7 +226,6 @@ const app = Vue.createApp({
 
     //mounted:  called after the instance has been mounted,
     mounted: async function () {
-        await this.setUpGame();
         await this.checkWeb3();
     },
 
@@ -262,8 +240,23 @@ const app = Vue.createApp({
         },
         wallet: {
             handler: async function(newAccount) {
-                await this.getBombs();
+                if (this.game) {
+                    this.getBombs();
+                }
             },
         },
-    }
+        gameAddress: {
+            handler: async function() {
+                this.game = await Game.setUpGame(this.gameAddress, this.RPC, this.ABI);
+                if (this.wallet.connected) {
+                    this.getBombs();
+                }
+            },
+        },
+        myBombs: {
+            handler: async function() {
+                this.reloadContainer();
+            },
+        },
+    },
 })

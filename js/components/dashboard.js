@@ -21,6 +21,11 @@ app.component('Dashboard', {
             let info = await Bomb.bombInfo(this.game, Number(id));
             this.bombTimer = (Number(info[1]) * 1000) - Date.now();
         },
+        updateActive: async function() {
+            const t = new ethers.providers.JsonRpcProvider(this.game.RPC);
+            let gameContract = new ethers.Contract(this.game.gameAddress, this.game.ABI, t);
+            this.activeBombs = await gameContract.getActiveBombs();
+        },
     },
 
     computed: {
@@ -40,11 +45,6 @@ app.component('Dashboard', {
             let seconds = (this.bombTimer % MS_PER_MINUTE) / MS_PER_SECOND;
             return this.bombTimer > 0 ? Math.floor(seconds) : Math.abs(Math.ceil(seconds));
         },
-        updateActive: async function() {
-            const t = new ethers.providers.JsonRpcProvider(this.game.RPC);
-            let gameContract = new ethers.Contract(this.game.gameAddress, this.game.ABI, t);
-            this.activeBombs = await gameContract.getActiveBombs();
-        },
     },
 
     watch: {
@@ -56,9 +56,7 @@ app.component('Dashboard', {
     },
 
     mounted: async function () {
-
         setTimeout(await this.updateActive(),2000);
-
     },
 
     template: `<div class="flex justify-center q-ma-l q-pa-md text-center bg-primary" id="itemContainer2">

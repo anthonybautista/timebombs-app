@@ -36,7 +36,7 @@ Bomb.activateBomb = async function (game, wallet, bomb) {
             let amount = 0;
             if (game.chargeERC20 && !game.feeERC20) {
                 amount = game.fee;
-            } else if (!game.chargeERC20 && !fgame.eeERC20) {
+            } else if (!game.chargeERC20 && !game.feeERC20) {
                 amount = game.cost + game.fee;
             } else if (!game.chargeERC20 && game.feeERC20) {
                 amount = game.cost;
@@ -101,6 +101,29 @@ function Game(nftAddress,
     this.gameOver = gameOver;
     this.chargeERC20 = chargeERC20;
     this.feeERC20 = feeERC20;
+}
+
+Game.setUpGame = async function (address, RPC, ABI) {
+    const t = new ethers.providers.JsonRpcProvider(RPC);
+    let gameContract = new ethers.Contract(address, ABI, t);
+    let data = await gameContract.getGameInfo();
+
+    return new Game(data[1],
+        address,
+        RPC,
+        ABI,
+        Number(data[2]) / 10**18,
+        Number(data[3]) / 10**18,
+        Number(data[5]),
+        Number(data[6]) * 1000,
+        Number(data[7]) * 1000,
+        data[9],
+        data[10],
+        data[11],
+        data[13],
+        data[14],
+        data[15],
+        data[16])
 }
 
 function Wallet(connected,

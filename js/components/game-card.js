@@ -4,7 +4,7 @@ app.component('GameCard', {
             errorMessage: "",
             gameStarted: false,
             remaining: 0,
-            timeRemaining: 0,
+            timeRemaining: this.game.startTime - Date.now(),
             timed: false,
             allowHalt: false,
             activeBombs: [],
@@ -14,10 +14,6 @@ app.component('GameCard', {
     props: {
         bombs: {
             type: Array,
-            required: true,
-        },
-        showDash: {
-            type: Boolean,
             required: true,
         },
         game: {
@@ -81,6 +77,11 @@ app.component('GameCard', {
     },
 
     watch: {
+        remaining: {
+            handler: async function(newRemaining) {
+                this.allowHalt = newRemaining <= this.game.maxWinners;
+            },
+        },
     },
 
     mounted: async function () {

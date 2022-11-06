@@ -56,6 +56,26 @@
                 </q-banner>
             </game-card>
 
+            <div v-else class="q-pa-md q-mt-xl q-mb-none flex justify-center">
+                <q-banner rounded class="bg-accent text-white">
+                    <div class="text-center">
+                        <q-form @submit="onSubmit">
+                            <q-input class="q-ma-sm bg-secondary q-pa-none rounded-borders"
+                                    type="number"
+                                    filled
+                                    label="Enter Game ID"
+                                    lazy-rules
+                                     v-model="gameId"
+                                    :rules="[ val => val > 0 || 'Invalid Game ID']"
+                            ></q-input>
+                            <div class="q-mt-lg">
+                                <q-btn label="Enter" type="submit" color="primary"> </q-btn>
+                            </div>
+                        </q-form>
+                    </div>
+                </q-banner>
+            </div>
+
             <div class="buffer-lg"></div>
 
             <q-footer class="bg-primary text-white q-pt-sm">
